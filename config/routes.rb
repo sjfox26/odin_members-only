@@ -1,9 +1,5 @@
 Rails.application.routes.draw do
-  get 'posts/new'
-
-  get 'posts/create'
-
-  get 'posts/index'
+  resources :posts, only: [:new, :create, :index]
 
   get    '/login',  to: 'sessions#new'
   post   '/login',  to: 'sessions#create'
