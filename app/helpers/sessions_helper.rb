@@ -42,4 +42,11 @@ module SessionsHelper
     @current_user = nil
   end
 
+  def require_sign_in
+    unless logged_in?
+      flash[:error] = "Sorry!  To pen a post you must be signed in!"
+      redirect_to root_path
+    end
+  end
+
 end
