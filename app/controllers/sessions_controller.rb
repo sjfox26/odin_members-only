@@ -15,6 +15,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    sign_out if logged_in?   #only logs out user if user is logged in,
+    sign_out if logged_in?   #only logs out user if user is logged in
+    redirect_to login_url
   end
 end
