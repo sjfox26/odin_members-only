@@ -16,13 +16,19 @@ class User < ApplicationRecord
   end
 
   def User.digest(string)
-    Digest::SHA1.hexdigest(string)
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine::cost
+    BCrypt::Password.create(string, cost: cost)
   end
 
   def remember
     self.remember_token = User.new_token
-    update_attribute(:remember_digest, User.digest(remember_token.to_s))
-    #self.remember_digest = User.digest(remember_token.to_s)
+    #update_attribute(:remember_digest, User.digest(remember_token))
+    self.remember_digest = User.digest(remember_token.to_s)
+  end
+
+  def authenticated?(remember_token)
+    return false if remember_digest.nil?
+    BCrypt::Password.new(remember_digest).is_password?(remember_token)
   end
 
   def forget
